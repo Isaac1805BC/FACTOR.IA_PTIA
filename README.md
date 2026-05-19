@@ -14,24 +14,9 @@ fake_news_detector/
 └── templates/
     └── index.html      # Interfaz web completa
 ```
-
-## Instalación
-
-### 1. Instalar dependencias
-```bash
-pip install -r requirements.txt
-```
-
-### 2. (Opcional) Entrenar con el dataset completo de Kaggle
-Descarga el dataset desde:
-https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset/data
-
-Coloca `True.csv` y `Fake.csv` en la carpeta del proyecto, luego descomenta
-el bloque de entrenamiento completo en `app.py` (ver comentario "DATASET COMPLETO").
-
 ### 3. Ejecutar la aplicación
 ```bash
-python app.py
+uv run --with flask --with scikit-learn --with numpy python app.py
 ```
 
 ### 4. Abrir en el navegador
