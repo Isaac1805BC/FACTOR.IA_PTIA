@@ -658,11 +658,223 @@
       letter-spacing: 0.08em;
     }
 
+    /* ─── MODEL INFO CARD ────────────────────────────────────────── */
+    .model-info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      animation: fadeSlideUp 0.7s ease 0.4s both;
+      position: relative;
+      overflow: hidden;
+    }
+    .model-info-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--real), transparent);
+      opacity: 0.5;
+    }
+    .model-info-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .model-info-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .model-info-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+    .btn-retrain {
+      padding: 8px 18px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      border: 1px solid var(--real);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--real);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-retrain:hover:not(:disabled) {
+      background: var(--real-dim);
+      box-shadow: 0 0 16px #00e5a020;
+    }
+    .btn-retrain:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .model-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .metric-val {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: var(--accent-g);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .metric-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .cm-dataset-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .dataset-info {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .dataset-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .dataset-row:last-child { border-bottom: none; }
+    .dataset-row span:last-child {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .cm-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .cm-grid {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr;
+      gap: 6px;
+      margin-top: 12px;
+      align-items: center;
+    }
+    .cm-header {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-align: center;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .cm-row-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding-right: 8px;
+    }
+    .cm-cell {
+      border-radius: 8px;
+      padding: 14px 8px;
+      text-align: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .cm-cell sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-style: normal;
+    }
+    .cm-correct {
+      background: #00e5a015;
+      border: 1px solid #00e5a030;
+      color: var(--real);
+    }
+    .cm-wrong {
+      background: #ff446615;
+      border: 1px solid #ff446630;
+      color: var(--fake);
+    }
+
+    .top-words-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .word-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .word-chip {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .word-chip.w-fake { border-color: #ff446640; color: var(--fake); }
+    .word-chip.w-real { border-color: #00e5a030; color: var(--real); }
+    .word-score { color: var(--muted); font-size: 9px; }
+
+    .no-stats-msg {
+      text-align: center;
+      padding: 24px 0 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .retrain-progress {
+      text-align: center;
+      padding: 20px 0;
+      display: none;
+    }
+    .retrain-progress.active { display: block; }
+
     /* ─── RESPONSIVE ─────────────────────────────────────────────── */
     @media (max-width: 600px) {
       .main-card { padding: 20px; }
       .prob-grid  { grid-template-columns: 1fr; }
       .stats-row  { grid-template-columns: 1fr 1fr; }
+      .model-metrics { grid-template-columns: 1fr 1fr; }
+      .cm-dataset-grid { grid-template-columns: 1fr; }
+      .top-words-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -776,6 +988,92 @@
       <div class="disclaimer">
         ⚠ Este sistema es una herramienta de apoyo académico. No reemplaza la verificación periodística profesional.<br>
         Modelo entrenado con el dataset <em>Fake and Real News Dataset</em> (Kaggle). Precisión en prueba: 98.6%
+      </div>
+    </div>
+
+    <!-- ── MODEL INFO ── -->
+    <div class="model-info-card">
+      <div class="model-info-header">
+        <div>
+          <span class="model-info-title">// Rendimiento del Modelo</span>
+          <span class="model-info-sub" id="model-trained-at"></span>
+        </div>
+        <button class="btn-retrain" id="btn-retrain" onclick="retrainModel()">↺ Reentrenar modelo</button>
+      </div>
+
+      <!-- Progreso de reentrenamiento -->
+      <div class="retrain-progress" id="retrain-progress">
+        <div class="loader-ring" style="width:36px;height:36px;border-width:2px;margin-bottom:10px"></div>
+        <div class="loader-text">Reentrenando con dataset completo<span class="loader-dots"></span></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Esto puede tardar varios segundos</div>
+      </div>
+
+      <!-- Sin estadísticas -->
+      <div id="no-stats-msg" class="no-stats-msg" style="display:none">
+        No hay estadísticas disponibles.<br>
+        Haz clic en <strong>Reentrenar modelo</strong> para calcularlas.
+      </div>
+
+      <!-- Contenido de estadísticas -->
+      <div id="model-stats-content" style="display:none">
+        <!-- Métricas -->
+        <div class="model-metrics">
+          <div class="metric-card">
+            <div class="metric-val" id="m-accuracy">–</div>
+            <div class="metric-label">Accuracy</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" id="m-f1fake" style="color:var(--fake)">–</div>
+            <div class="metric-label">F1 FAKE</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" id="m-f1real" style="color:var(--real)">–</div>
+            <div class="metric-label">F1 REAL</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val" id="m-auc" style="color:var(--warn)">–</div>
+            <div class="metric-label">AUC-ROC</div>
+          </div>
+        </div>
+
+        <!-- Dataset + Matriz de confusión -->
+        <div class="cm-dataset-grid">
+          <div class="dataset-info">
+            <div class="section-title">◈ Dataset</div>
+            <div class="dataset-row"><span>Total muestras</span><span id="d-total">–</span></div>
+            <div class="dataset-row"><span>Entrenamiento (80%)</span><span id="d-train">–</span></div>
+            <div class="dataset-row"><span>Prueba (20%)</span><span id="d-test">–</span></div>
+            <div class="dataset-row"><span style="color:var(--fake)">Noticias FAKE</span><span id="d-fake">–</span></div>
+            <div class="dataset-row"><span style="color:var(--real)">Noticias REAL</span><span id="d-real">–</span></div>
+          </div>
+
+          <div class="cm-wrap">
+            <div class="section-title">◈ Matriz de Confusión</div>
+            <div class="cm-grid">
+              <div></div>
+              <div class="cm-header" style="color:var(--fake)">Pred FAKE</div>
+              <div class="cm-header" style="color:var(--real)">Pred REAL</div>
+              <div class="cm-row-label" style="color:var(--fake)">Real FAKE</div>
+              <div class="cm-cell cm-correct" id="cm-tn">–<sub>Verdadero Neg.</sub></div>
+              <div class="cm-cell cm-wrong"   id="cm-fp">–<sub>Falso Pos.</sub></div>
+              <div class="cm-row-label" style="color:var(--real)">Real REAL</div>
+              <div class="cm-cell cm-wrong"   id="cm-fn">–<sub>Falso Neg.</sub></div>
+              <div class="cm-cell cm-correct" id="cm-tp">–<sub>Verdadero Pos.</sub></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top palabras -->
+        <div class="top-words-grid">
+          <div>
+            <div class="section-title">⚑ Palabras indicadoras de FAKE</div>
+            <div class="word-chips" id="fake-words"></div>
+          </div>
+          <div>
+            <div class="section-title">✦ Palabras indicadoras de REAL</div>
+            <div class="word-chips" id="real-words"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -921,6 +1219,80 @@
       document.getElementById('char-count').textContent = '0 caracteres';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // ── Model Info ────────────────────────────────────────────────
+    function renderModelStats(d) {
+      if (!d || !d.accuracy) {
+        document.getElementById('no-stats-msg').style.display = 'block';
+        document.getElementById('model-stats-content').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('no-stats-msg').style.display = 'none';
+      document.getElementById('model-stats-content').style.display = 'block';
+
+      document.getElementById('model-trained-at').textContent = d.trained_at ? `Último entrenamiento: ${d.trained_at}` : '';
+
+      document.getElementById('m-accuracy').textContent = d.accuracy + '%';
+      document.getElementById('m-f1fake').textContent   = d.f1_fake + '%';
+      document.getElementById('m-f1real').textContent   = d.f1_real + '%';
+      document.getElementById('m-auc').textContent      = d.auc_roc + '%';
+
+      document.getElementById('d-total').textContent = d.total_samples.toLocaleString();
+      document.getElementById('d-train').textContent = d.train_samples.toLocaleString();
+      document.getElementById('d-test').textContent  = d.test_samples.toLocaleString();
+      document.getElementById('d-fake').textContent  = d.fake_count.toLocaleString();
+      document.getElementById('d-real').textContent  = d.real_count.toLocaleString();
+
+      const cm = d.confusion_matrix;
+      document.getElementById('cm-tn').childNodes[0].textContent = cm[0][0].toLocaleString();
+      document.getElementById('cm-fp').childNodes[0].textContent = cm[0][1].toLocaleString();
+      document.getElementById('cm-fn').childNodes[0].textContent = cm[1][0].toLocaleString();
+      document.getElementById('cm-tp').childNodes[0].textContent = cm[1][1].toLocaleString();
+
+      document.getElementById('fake-words').innerHTML = d.top_fake_words.map(([w, s]) =>
+        `<div class="word-chip w-fake">${w}<span class="word-score">${s}</span></div>`
+      ).join('');
+
+      document.getElementById('real-words').innerHTML = d.top_real_words.map(([w, s]) =>
+        `<div class="word-chip w-real">${w}<span class="word-score">+${s}</span></div>`
+      ).join('');
+    }
+
+    async function loadModelInfo() {
+      try {
+        const resp = await fetch('/model-info');
+        const data = await resp.json();
+        renderModelStats(data);
+      } catch {
+        document.getElementById('no-stats-msg').style.display = 'block';
+      }
+    }
+
+    async function retrainModel() {
+      const btn = document.getElementById('btn-retrain');
+      const progress = document.getElementById('retrain-progress');
+      const statsContent = document.getElementById('model-stats-content');
+      const noStats = document.getElementById('no-stats-msg');
+
+      btn.disabled = true;
+      progress.classList.add('active');
+      statsContent.style.display = 'none';
+      noStats.style.display = 'none';
+
+      try {
+        const resp = await fetch('/retrain', { method: 'POST' });
+        const data = await resp.json();
+        renderModelStats(data);
+      } catch {
+        document.getElementById('no-stats-msg').style.display = 'block';
+      } finally {
+        progress.classList.remove('active');
+        btn.disabled = false;
+      }
+    }
+
+    loadModelInfo();
   </script>
 </body>
 </html>

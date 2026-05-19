@@ -3,11 +3,14 @@ import pickle
 import os
 import re
 import time
+import json
 
 # ML imports
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score, confusion_matrix
 import numpy as np
 
 app = Flask(__name__)
@@ -47,7 +50,10 @@ def preprocess_text(text):
 
 # ── Model ────────────────────────────────────────────────────────────────────
 MODEL_PATH = 'model.pkl'
+STATS_PATH = 'model_stats.json'
 DATASET_DIR = 'archive'
+
+model_stats = {}
 
 def load_csv_dataset():
     import csv
@@ -66,23 +72,56 @@ def load_csv_dataset():
     return X, y
 
 def train_model():
+    global model_stats
     print("Cargando dataset...")
     X, y = load_csv_dataset()
     print(f"Dataset cargado: {len(X)} muestras ({y.count(0)} fake, {y.count(1)} real)")
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(preprocessor=preprocess_text, max_features=10000, ngram_range=(1, 2))),
         ('clf', LogisticRegression(max_iter=1000, C=1.0))
     ])
     print("Entrenando modelo...")
-    pipeline.fit(X, y)
+    pipeline.fit(X_train, y_train)
+
+    print("Evaluando modelo...")
+    y_pred = pipeline.predict(X_test)
+    y_proba = pipeline.predict_proba(X_test)[:, 1]
+    cm = confusion_matrix(y_test, y_pred)
+
+    feature_names = pipeline.named_steps['tfidf'].get_feature_names_out()
+    coefs = pipeline.named_steps['clf'].coef_[0]
+
+    model_stats = {
+        'accuracy': round(accuracy_score(y_test, y_pred) * 100, 1),
+        'f1_fake': round(f1_score(y_test, y_pred, pos_label=0) * 100, 1),
+        'f1_real': round(f1_score(y_test, y_pred, pos_label=1) * 100, 1),
+        'auc_roc': round(roc_auc_score(y_test, y_proba) * 100, 1),
+        'confusion_matrix': cm.tolist(),
+        'total_samples': len(X),
+        'train_samples': len(X_train),
+        'test_samples': len(X_test),
+        'fake_count': y.count(0),
+        'real_count': y.count(1),
+        'top_fake_words': [[feature_names[i], round(float(coefs[i]), 3)] for i in coefs.argsort()[:10]],
+        'top_real_words': [[feature_names[i], round(float(coefs[i]), 3)] for i in coefs.argsort()[-10:][::-1]],
+        'trained_at': time.strftime('%Y-%m-%d %H:%M'),
+    }
 
     with open(MODEL_PATH, 'wb') as f:
         pickle.dump(pipeline, f)
+    with open(STATS_PATH, 'w', encoding='utf-8') as f:
+        json.dump(model_stats, f)
     print("Modelo guardado en model.pkl")
     return pipeline
 
 def load_model():
+    global model_stats
+    if os.path.exists(STATS_PATH):
+        with open(STATS_PATH, 'r', encoding='utf-8') as f:
+            model_stats = json.load(f)
     if os.path.exists(MODEL_PATH):
         with open(MODEL_PATH, 'rb') as f:
             return pickle.load(f)
@@ -187,11 +226,15 @@ def analyze():
         'char_count': len(text),
     })
 
+@app.route('/model-info')
+def model_info():
+    return jsonify(model_stats)
+
 @app.route('/retrain', methods=['POST'])
 def retrain():
     global model
     model = train_model()
-    return jsonify({'status': 'Model retrained successfully'})
+    return jsonify({'status': 'ok', **model_stats})
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
